@@ -17,5 +17,4 @@ defmodule FilesTest do
   test "words per line" do
     assert Files.words_per_line!("test/resources/some_file.txt") == [1, 2, 3, 0, 1]
   end
-
 end

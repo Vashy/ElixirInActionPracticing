@@ -9,14 +9,14 @@ defmodule Files do
     path
     |> file_stream!
     |> Stream.map(&String.length/1)
-    |> Enum.max
+    |> Enum.max()
   end
 
   def longest_line!(path) do
     path
     |> file_stream!
     |> Enum.sort(&(byte_size(&1) > byte_size(&2)))
-    |> List.first
+    |> List.first()
   end
 
   def words_per_line!(path) do
@@ -31,8 +31,7 @@ defmodule Files do
 
   defp file_stream!(path) do
     path
-    |> File.stream!
+    |> File.stream!()
     |> Stream.map(&without_newline_character/1)
   end
-
 end
