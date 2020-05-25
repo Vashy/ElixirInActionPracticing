@@ -74,7 +74,6 @@ defmodule RefactoredTodoList do
   end
 
   defmodule CsvImporter do
-
     def import(path) do
       path
       |> File.stream!()
@@ -95,4 +94,23 @@ defmodule RefactoredTodoList do
       {elem(date, 0), elem(date, 1), elem(date, 2)}
     end
   end
+end
+
+defimpl String.Chars, for: TodoList do
+  def to_string(_) do
+    "#TodoList"
+  end
+end
+
+defimpl Collectable, for: RefactoredTodoList do
+  def into(original) do
+    {original, &into_callback/2}
+  end
+
+  defp into_callback(todo_list, {:cont, entry}) do
+    RefactoredTodoList.add_entry(todo_list, entry)
+  end
+
+  defp into_callback(todo_list, :done), do: todo_list
+  defp into_callback(_, :halt), do: :ok
 end

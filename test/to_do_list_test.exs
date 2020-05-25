@@ -135,3 +135,25 @@ defmodule RefactoredTodoList.CsvImporterTest do
              ])
   end
 end
+
+defmodule RefactoredTodoList.Collectable.Test do
+  use ExUnit.Case
+  doctest RefactoredTodoList
+
+  test "comprehension test" do
+    entries = [
+      %{date: {2013, 12, 19}, title: "Dentist"},
+      %{date: {2013, 12, 20}, title: "Shopping"},
+      %{date: {2013, 12, 19}, title: "Movies"}
+    ]
+
+    result = for entry <- entries, into: RefactoredTodoList.new(), do: entry
+
+    assert result ===
+             RefactoredTodoList.new([
+               %{date: {2013, 12, 19}, title: "Dentist", id: 1},
+               %{date: {2013, 12, 20}, title: "Shopping", id: 2},
+               %{date: {2013, 12, 19}, title: "Movies", id: 3}
+             ])
+  end
+end
