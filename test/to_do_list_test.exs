@@ -95,7 +95,6 @@ defmodule RefactoredTodoList.Test do
     todo_list =
       TodoList.new()
       |> TodoList.add_entry(%{date: {2020, 11, 13}, title: "Title 1"})
-      |> IO.inspect()
 
     assert todo_list
            |> TodoList.delete_entry(1) === %TodoList{auto_id: 2}
