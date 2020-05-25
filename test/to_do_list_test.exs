@@ -100,4 +100,39 @@ defmodule RefactoredTodoList.Test do
     assert todo_list
            |> TodoList.delete_entry(1) === %TodoList{auto_id: 2}
   end
+
+  test "new from list" do
+    todo_list =
+      TodoList.new([
+        %{date: {2020, 11, 13}, title: "Title 1"},
+        %{date: {2020, 11, 13}, title: "Title X"},
+        %{date: {2020, 9, 13}, title: "Title 2"},
+        %{date: {2020, 2, 10}, title: "Title 3"}
+      ])
+
+    assert TodoList.entries(todo_list, {2020, 11, 13}) === [
+             %{date: {2020, 11, 13}, title: "Title 1", id: 1},
+             %{date: {2020, 11, 13}, id: 2, title: "Title X"}
+           ]
+
+    assert TodoList.entries(todo_list, {2020, 9, 13}) === [%{date: {2020, 9, 13}, title: "Title 2", id: 3}]
+    assert TodoList.entries(todo_list, {2020, 2, 10}) === [%{date: {2020, 2, 10}, title: "Title 3", id: 4}]
+  end
+end
+
+defmodule RefactoredTodoList.CsvImporterTest do
+  use ExUnit.Case
+  doctest RefactoredTodoList.CsvImporter
+
+  alias RefactoredTodoList.CsvImporter, as: CsvImporter
+  alias RefactoredTodoList, as: TodoList
+
+  test "import a csv file in a RefactoredTodoList" do
+    assert CsvImporter.import("test/resources/todo_list.csv") ===
+             TodoList.new([
+               %{date: {2013, 12, 19}, title: "Dentist", id: 1},
+               %{date: {2013, 12, 20}, title: "Shopping", id: 2},
+               %{date: {2013, 12, 19}, title: "Movies", id: 3}
+             ])
+  end
 end

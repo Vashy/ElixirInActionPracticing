@@ -23,7 +23,13 @@ end
 defmodule RefactoredTodoList do
   defstruct auto_id: 1, entries: %{}
 
-  def new, do: %RefactoredTodoList{}
+  def new(entries \\ []) do
+    Enum.reduce(
+      entries,
+      %RefactoredTodoList{},
+      fn entry, todo_list_acc -> add_entry(todo_list_acc, entry) end
+    )
+  end
 
   def add_entry(
         %RefactoredTodoList{entries: entries, auto_id: auto_id} = todo_list,
@@ -65,5 +71,28 @@ defmodule RefactoredTodoList do
   def delete_entry(%RefactoredTodoList{entries: entries} = todo_list, id) do
     new_entries = Map.delete(entries, id)
     %RefactoredTodoList{todo_list | entries: new_entries}
+  end
+
+  defmodule CsvImporter do
+
+    def import(path) do
+      path
+      |> File.stream!()
+      |> Stream.map(&String.replace(&1, "\n", ""))
+      |> Stream.map(&String.split(&1, ","))
+      |> Stream.map(&List.to_tuple(&1))
+      |> Stream.map(&%{date: to_date(elem(&1, 0)), title: elem(&1, 1)})
+      |> RefactoredTodoList.new()
+    end
+
+    defp to_date(datestr) do
+      date =
+        datestr
+        |> String.split("/")
+        |> Enum.map(&String.to_integer/1)
+        |> List.to_tuple()
+
+      {elem(date, 0), elem(date, 1), elem(date, 2)}
+    end
   end
 end
