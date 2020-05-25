@@ -1,5 +1,4 @@
 defmodule Fraction do
-
   defstruct a: nil, b: nil
 
   def new(a, b) do
@@ -19,5 +18,4 @@ defmodule Fraction do
       b2 * b1
     )
   end
-
 end

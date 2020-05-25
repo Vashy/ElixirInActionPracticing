@@ -7,8 +7,8 @@ defmodule FractionTest do
   end
 
   test "value" do
-    assert Fraction.new(2, 1) |> Fraction.value === 2.0
-    assert Fraction.new(3, 2) |> Fraction.value === 1.5
+    assert Fraction.new(2, 1) |> Fraction.value() === 2.0
+    assert Fraction.new(3, 2) |> Fraction.value() === 1.5
   end
 
   test "add" do
